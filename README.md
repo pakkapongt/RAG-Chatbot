@@ -1,10 +1,12 @@
 # RAG-Chatbot
 
+
+## Installation
 ```bash
 pip install -r requirements.txt
 ```
 
-#Workflow Summary:
+# Workflow Summary:
 1. User Interaction: The user submits a question via the chatbot interface (bot_1.html).
 2 . Message Handling: The message is sent to the /chat endpoint via a POST request.
 3. Text Preprocessing: The chatbot retrieves relevant context from a text file and splits it into chunks.
