@@ -7,7 +7,7 @@ pip install -r requirements.txt
 ```
 
 # Workflow Summary:
-1. User Interaction: The user submits a question via the chatbot interface (bot_1.html).
+1. User Interaction: The user submits a question via the chatbot interface (Chatbot.html).
 2 . Message Handling: The message is sent to the /chat endpoint via a POST request.
 3. Text Preprocessing: The chatbot retrieves relevant context from a text file and splits it into chunks.
 4. Retrieval: A semantic search (using embeddings and FAISS) retrieves relevant chunks from the knowledge base.
