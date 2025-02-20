@@ -1,0 +1,15 @@
+
+langchain
+langchain-core
+langchain-community
+gpt4all
+faiss-cpu
+sentence-transformers
+transformers
+flask
+jinja2
+jinja2-time
+python-dateutil
+python-docx
+python-editor
+pytz

@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chatbot</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <style>
+        body {
+            background-color: #f0f4f8;
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        #container {
+            background-color: #ffffff;
+            border-radius: 15px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 650px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            height: 85vh;
+        }
+        h1 {
+            text-align: center;
+            background-color: #0077b6;
+            color: white;
+            margin: 0;
+            padding: 15px 0;
+            font-size: 24px;
+        }
+        #chat_log {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            border-bottom: 1px solid #ddd;
+            background-color: #f9f9f9;
+        }
+        .message {
+            margin-bottom: 15px;
+            padding: 12px;
+            border-radius: 15px;
+            max-width: 80%;
+            font-size: 16px;
+        }
+        .user-message {
+            background-color: #74cfae;
+            align-self: flex-end;
+            color: white;
+        }
+        .bot-message {
+            background-color: #e0e0e0;
+            align-self: flex-start;
+            color: #333;
+        }
+        #chat_form {
+            display: flex;
+            border-top: 1px solid #ddd;
+            padding: 10px;
+            background-color: #f1f1f1;
+        }
+        #user_input {
+            flex: 1;
+            border: none;
+            padding: 12px;
+            font-size: 16px;
+            border-radius: 25px;
+            background-color: #fafafa;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        #user_input:focus {
+            outline: none;
+            background-color: #ffffff;
+        }
+        button[type="submit"] {
+            background-color: #0077b6;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            cursor: pointer;
+            font-size: 16px;
+            border-radius: 25px;
+            margin-left: 10px;
+        }
+        button[type="submit"]:hover {
+            background-color: #005f87;
+        }
+    </style>
+    <script>
+        $(document).ready(function () {
+            $('#chat_form').on('submit', function (event) {
+                event.preventDefault();
+                var userMessage = $('#user_input').val();
+                $('#user_input').val('');
+                if (userMessage.trim() !== '') {
+                    addMessage('user', userMessage);
+                    sendMessage(userMessage);
+                }
+            });
+
+            function addMessage(sender, message) {
+                var messageElement = $('<div class="message ' + sender + '-message"></div>').text(message);
+                $('#chat_log').append(messageElement);
+                scrollToBottom();
+            }
+
+            function scrollToBottom() {
+                $('#chat_log').scrollTop($('#chat_log')[0].scrollHeight);
+            }
+
+            function sendMessage(message) {
+                addMessage('bot', 'Bot is typing...');
+                $.ajax({
+                    type: 'POST',
+                    url: '/chat',
+                    data: { user_input: message },
+                    success: function (response) {
+                        $('.bot-message').last().remove();
+                        addMessage('bot', response.response);
+                    },
+                    error: function () {
+                        $('.bot-message').last().remove();
+                        addMessage('bot', 'Sorry, something went wrong.');
+                    }
+                });
+            }
+        });
+    </script>
+</head>
+<body>
+    <div id="container">
+        <h1>Chatbot</h1>
+        <div id="chat_log">
+            <div class="message bot-message">
+                <p>Welcome to the Chatbot!</p>
+            </div>
+        </div>
+        <form id="chat_form" method="post">
+            <input type="text" id="user_input" autocomplete="off" placeholder="Type your message..." />
+            <button type="submit">Send</button>
+        </form>
+    </div>
+</body>
+</html>
